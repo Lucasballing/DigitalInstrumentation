@@ -25,7 +25,8 @@ struct time time1;
 /////////////////////////////////////////////////////////////
 void initTimer();
 void initstopwatch();
-void PrintStopwatch();
+void PrintWatch();
+void PrintStopwatch(uint8_t joyStickStateLocal);
 #endif
 
 

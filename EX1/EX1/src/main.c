@@ -21,9 +21,10 @@
 // ------------------------Global Variables--------------------------//
 ///////////////////////////////////////////////////////////////////////
 uint8_t joyStickState = 0;
-uint8_t lastJoystickstate = 0;
+uint8_t lastJoystickstate = 1;
 uint8_t GreenColor, BlueColor, RedColor = 0;
 uint8_t stopState = 0;
+uint8_t joyStickStateLocal = 0;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
@@ -102,13 +103,15 @@ int main(void)
     // Read Joystick state
     joyStickState = readJoystick();
 
+    if(joyStickState != lastJoystickstate){
+        PrintStopwatch(joyStickState);
+    }
     // Logic for changing color depending on how the
     if((joyStickState != lastJoystickstate) && joyStickState){
         //Print the state of the Joystick to the console
         updateLEDValues( joyStickState, GreenColor, BlueColor, RedColor );
+        // Save last Joystick state to ensure that it doesn't print to much (Only change state if the state has changed)
+        lastJoystickstate = joyStickState;
     }
-    // Save last Joystick state to ensure that it doesn't print to much (Only change state if the state has changed)
-    lastJoystickstate = joyStickState;
-    PrintStopwatch();
  }
 }
