@@ -7,10 +7,10 @@
 * This file is part of the course project for Digital Instrumentation - 30021
 * Author: Christoffer Frost- s183813
 */
-
+#include "stm32f30x_conf.h"
 #include "30021_io.h"
 #include "GPIO.h"
-
+#include "Timer.h"
 //Timer set to 100Hz at highest priority
 void initTimer(){
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
@@ -22,6 +22,7 @@ void initTimer(){
     TIM_InitStructure.TIM_Prescaler = 0;
     TIM_TimeBaseInit(TIM2,&TIM_InitStructure);
     // NVIC for timer
+    NVIC_InitTypeDef NVIC_InitStructure;
     NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -32,22 +33,21 @@ void initTimer(){
 }
 
 void TIM2_IRQHandler(void) {
-
-        if(stopState=0){
-        time.hs++;
-        if (time.hs == 100){
-            time.s++;
-            time.hs = 0;
-
-        }
-        if (time.s == 60){
-            time.m++;
-            time.s = 0;
+        if(stopState == 0){
+        time1.hs++;
+        if (time1.hs == 100){
+            time1.s++;
+            time1.hs = 0;
 
         }
-        if (time.m == 60){
-            time.h++;
-            time.m = 0;
+        if (time1.s == 60){
+            time1.m++;
+            time1.s = 0;
+
+        }
+        if (time1.m == 60){
+            time1.h++;
+            time1.m = 0;
         }
         }
 
@@ -58,59 +58,61 @@ void TIM2_IRQHandler(void) {
 
  void initstopwatch(){
 
-    time.hs = 0;
-    time.s = 0;
-    time.m = 0;
-    time.h = 0;
-    time.s2 = 0;
-    time.hs2 = 0;
+    time1.hs = 0;
+    time1.s = 0;
+    time1.m = 0;
+    time1.h = 0;
 }
+
 
 void PrintStopwatch(){
 
-    joyStickState = readJoystick();
+    uint8_t joyStickStateLocal = readJoystick();
 
 
 
-    if(joyStickState == 16){
+    if(joyStickStateLocal == 16){
         printf("joyStick is Pressed Center\n");
-        printf("%d",time.hs);
+        printf("%d",time1.hs);
         printf(":");
-        printf("%d",time.s);
+        printf("%d",time1.s);
         printf(":");
-        printf("%d",time.m);
-        printf(":")
-        printf("%d",time.h);
+        printf("%d",time1.m);
+        printf(":");
+        printf("%d",time1.h);
         if(stopState==1){
             stopState=0;
         }
         else{
           stopState = 1;
         }
-
-    else if(joyStickState == 4){
-
-        printf("\n%d",time.hs);
-        printf(":%d",time.s);
-        printf(":%d",time.m);
-        printf(":%d",time.h);
     }
-    else if(joyStickState == 8){
-        printf("\n")
-        printf("%d",time.hs);
-        printf(":%d",time.s);
-        printf(":%d",time.m);
-        printf(":%d",time.h);
+
+    else if(joyStickStateLocal == 4){
+
+        printf("\n%d",time1.hs);
+        printf(":%d",time1.s);
+        printf(":%d",time1.m);
+        printf(":%d",time1.h);
     }
-    else if(joyStickState == 2){
-        clrscr();
+    else if(joyStickStateLocal == 8){
+        printf("\n");
+        printf("%d",time1.h);
+        printf(":%d",time1.m);
+        printf(":%d",time1.s);
+        printf(":%d",time1.hs);
+    }
+    else if(joyStickStateLocal == 2){
+        printf("%c[%d%c", 0x1B,2, 0x4a);
         initstopwatch();
         stopState = 1;
     }
     else{
-        printf("%d",time.hs);
-        printf(":%d",time.s);
-        printf(":%d",time.m);
-        printf(":%d",time.h);
+        printf("%c[%d;%d%c", 0x1B, 1,  1, 0x66);
+        printf("%d",time1.hs);
+        printf(":%d",time1.s);
+        printf(":%d",time1.m);
+        printf(":%d",time1.h);
+
     }
 }

@@ -95,6 +95,7 @@
 		<Unit filename="inc\stm32f30x.h" />
 		<Unit filename="inc\stm32f30x_conf.h" />
 		<Unit filename="inc\system_stm32f30x.h" />
+		<Unit filename="inc\Timer.h" />
 		<Unit filename="readme.txt" />
 		<Unit filename="SPL\inc\stm32f30x_adc.h" />
 		<Unit filename="SPL\inc\stm32f30x_can.h" />
@@ -200,6 +201,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\system_stm32f30x.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\Timer.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="stm32f302c6_flash.ld" />

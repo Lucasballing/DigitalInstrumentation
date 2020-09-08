@@ -6,6 +6,8 @@
 * Author: Lucas Balling - s163954
 * File type: HEADER File
 */
+#ifndef _GPIO_H_
+#define _GPIO_H_
 
 
 /////////////////// Private Functions //////////////////////
@@ -34,3 +36,4 @@ void initJoystick(void);
 * Output- the state of the GPIO in a special format defined in the exercise.
 */
 uint8_t readJoystick(void);
+#endif

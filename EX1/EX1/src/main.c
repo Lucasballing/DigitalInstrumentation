@@ -16,14 +16,14 @@
 // Includes need for the GPIOs
 #include "GPIO.h"
 #include "LED_Driver.h"
-
+#include "Timer.h"
 ///////////////////////////////////////////////////////////////////////
 // ------------------------Global Variables--------------------------//
 ///////////////////////////////////////////////////////////////////////
 uint8_t joyStickState = 0;
 uint8_t lastJoystickstate = 0;
 uint8_t GreenColor, BlueColor, RedColor = 0;
-
+uint8_t stopState = 0;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
@@ -68,6 +68,7 @@ void setup(void){
     // Init LED GPIO
     initLED();
 
+
     // Setup of interrupt rutines:
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG,ENABLE);
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB,EXTI_PinSource0); // sets port B pin 5 to the interrupts
@@ -88,6 +89,8 @@ void setup(void){
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_Init(&NVIC_InitStructure);
+    initTimer();
+    initstopwatch();
 }
 int main(void)
 {
@@ -106,5 +109,6 @@ int main(void)
     }
     // Save last Joystick state to ensure that it doesn't print to much (Only change state if the state has changed)
     lastJoystickstate = joyStickState;
+    PrintStopwatch();
  }
 }
