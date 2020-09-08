@@ -9,6 +9,8 @@
 */
 #include "30021_io.h"
 
+void setLed(int8_t Green,int8_t Blue, int8_t Red);
+
 void initLED(void){
     // Init GPIO used for LEDs - Set to output
 
@@ -52,6 +54,36 @@ void initLED(void){
 
 }
 
+void updateLEDValues(uint8_t joyStickStateInput,uint8_t GreenColor, uint8_t BlueColor, uint8_t RedColor ){
+        if (joyStickStateInput == 1){
+            printf("joyStick is Pulled Up\n");
+            GreenColor = 1;
+            RedColor = 0;
+            BlueColor = 0;
+        }else if(joyStickStateInput == 2){
+            printf("joyStick is Pulled Down\n");
+            GreenColor = 0;
+            RedColor = 1;
+            BlueColor = 0;
+        }else if(joyStickStateInput == 4){
+            printf("joyStick is Pressed Left\n");
+            GreenColor = 0;
+            RedColor = 0;
+            BlueColor = 1;
+        }else if(joyStickStateInput == 8){
+            printf("joyStick is Pressed Right\n");
+            GreenColor = 1;
+            RedColor = 1;
+            BlueColor = 0;
+        }else if(joyStickStateInput == 16){
+            printf("joyStick is Pressed Center\n");
+            GreenColor = 1;
+            RedColor = 0;
+            BlueColor = 1;
+        }
+        // Depending on the Joystick direction the LED state will be changed.
+        setLed(GreenColor, BlueColor, RedColor);
+}
 void setLed(int8_t Green,int8_t Blue, int8_t Red){
     // Green - PC7
     // Blue  - PA9
