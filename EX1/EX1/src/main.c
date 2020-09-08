@@ -27,54 +27,84 @@ uint8_t GreenColor, BlueColor, RedColor = 0;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
-int main(void)
-{
- init_usb_uart( 9600 ); // Initialize USB serial emulation at 9600 baud
- initJoystick();
- // Init LED GPIO
- initLED();
- printf("Initialising all hardware components\n"); // Show the world you are alive!
- while(1){
-    // Do things in the while loop
-    // Read Joystick state
-    joyStickState = readJoystick();
-
-
-    if(joyStickState != lastJoystickstate){
-        //Print the state of the Joystick to the consol
-        if (joyStickState == 1){
-            printf("joyStick is Pulled Up\n");
-            GreenColor = 1;
-            RedColor = 0;
-            BlueColor = 0;
-        }else if(joyStickState == 2){
-            printf("joyStick is Pulled Down\n");
-            GreenColor = 0;
-            RedColor = 1;
-            BlueColor = 0;
-        }else if(joyStickState == 4){
-            printf("joyStick is Pressed Left\n");
-            GreenColor = 0;
-            RedColor = 0;
-            BlueColor = 1;
-        }else if(joyStickState == 8){
-            printf("joyStick is Pressed Right\n");
-            GreenColor = 1;
-            RedColor = 1;
-            BlueColor = 0;
-        }else if(joyStickState == 16){
-            printf("joyStick is Pressed Center\n");
-            GreenColor = 1;
-            RedColor = 0;
-            BlueColor = 1;
-        }
-    }
-    // Save last Joystick state to ensure that it doesnt print to much
-    lastJoystickstate = joyStickState;
+void EXTI0_IRQHandler(void){
+ // Simply make a light show: - Change colors every 2 second.
+    printf("The Interupt is called!\n Now we make a real crazy light show for you guys ;) \n");
+    for (int8_t i = 0;i<10; i++){
+            if( i < 3){
+                GreenColor = 1;
+                RedColor = 0;
+                BlueColor = 1;
+            }else if(i < 6){
+                GreenColor = 1;
+                RedColor = 0;
+                BlueColor = 0;
+            } else {
+                GreenColor = 0;
+                RedColor = 0;
+                BlueColor = 1;
+            }
 
     // Depending on the Joystick direction the LED state will be changed.
     setLed(GreenColor, BlueColor, RedColor);
+    // Use a for loop to
+    for (int j = 0;j<1000000; j++){
+     // Do nothing - Just count.
+    }
+    }
+ //Clear the interrupt pending bit
+EXTI_ClearITPendingBit(EXTI_Line0);
+}
 
 
+
+void setup(void){
+    init_usb_uart( 9600 ); // Initialize USB serial emulation at 9600 baud
+    printf("Initialising all hardware components\n");
+
+    // Initialise the Joystick
+    initJoystick();
+
+    // Init LED GPIO
+    initLED();
+
+    // Setup of interrupt rutines:
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG,ENABLE);
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB,EXTI_PinSource0); // sets port B pin 5 to the interrupts
+
+    // define and set setting for EXTI
+    EXTI_InitTypeDef EXTI_InitStructure;
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0; // line 5 see [RM p. 215]
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    EXTI_Init(&EXTI_InitStructure);
+
+    // setup NVIC
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStructure);
+}
+int main(void)
+{
+ // Run all setup task before going into the while loop.
+ setup();
+
+ // Now we are ready to enter the While loop.
+ while(1){
+    // Read Joystick state
+    joyStickState = readJoystick();
+
+    // Logic for changing color depending on how the
+    if((joyStickState != lastJoystickstate) && joyStickState){
+        //Print the state of the Joystick to the console
+        updateLEDValues( joyStickState, GreenColor, BlueColor, RedColor );
+    }
+    // Save last Joystick state to ensure that it doesn't print to much (Only change state if the state has changed)
+    lastJoystickstate = joyStickState;
  }
 }
