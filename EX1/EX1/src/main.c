@@ -25,6 +25,7 @@ uint8_t lastJoystickstate = 1;
 uint8_t GreenColor, BlueColor, RedColor = 0;
 uint8_t stopState = 0;
 uint8_t joyStickStateLocal = 0;
+uint8_t temp =0;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
@@ -92,6 +93,8 @@ void setup(void){
     NVIC_Init(&NVIC_InitStructure);
     initTimer();
     initstopwatch();
+
+    // Setup exericee 1-6
 }
 int main(void)
 {
@@ -102,6 +105,20 @@ int main(void)
  while(1){
     // Read Joystick state
     joyStickState = readJoystick();
+
+    // Debounce Logic
+    if ( (joyStickState >> 4) == 1) {
+        // Check if the buttom is still pressed after a short loop
+        for (int i=0; i<10000; i++) {
+            // Do nothing
+        }
+        temp = readJoystick();
+        if ( (temp >> 4) == 1) {
+            // Do nothing
+        }else{
+            joyStickState &= 1+ (1 << 1) + (1 << 2) + (1 << 3);
+        }
+    }
 
     if(joyStickState != lastJoystickstate){
         PrintStopwatch(joyStickState);
