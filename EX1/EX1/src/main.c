@@ -58,19 +58,7 @@ void EXTI0_IRQHandler(void){
 EXTI_ClearITPendingBit(EXTI_Line0);
 }
 
-
-
-void setup(void){
-    init_usb_uart( 9600 ); // Initialize USB serial emulation at 9600 baud
-    printf("Initialising all hardware components\n");
-
-    // Initialise the Joystick
-    initJoystick();
-
-    // Init LED GPIO
-    initLED();
-
-
+void  init_interrupt(void){
     // Setup of interrupt rutines:
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG,ENABLE);
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB,EXTI_PinSource0); // sets port B pin 5 to the interrupts
@@ -91,10 +79,60 @@ void setup(void){
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_Init(&NVIC_InitStructure);
+}
+
+/*
+void init_PulseWidthMeas(void){
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM2,ENABLE);
+    // Set the time base unit
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+    TIM_TimeBaseInitTypeDef TIM_ICInitStructure;
+    TIM_TimeBaseStructInit(&TIM_ICInitStructure);
+    TIM_ICInitStructure.TIM_Channel = 0;
+    TIM_ICInitStructure.TIM_ICPolarity = 0;
+    TIM_ICInitStructure.TIM_ICFilter = 0;
+    TIM_ICInitStructure..TIM_ICPrescaler = 0;
+    TIM_PWMIConfig(TIM2, &TIM_ICInitStructure) ;
+    TIM_ITConfig(TIM2, TIM_IT_CC2);
+    TIM_Cmd(ENABLE);
+
+
+// Use this function to read the value
+TIM_GetCapturex(TIMx);
+}
+*/
+void GPIO_set_AF_PAx(void){
+     // Init GPIO - Here we use GPIOA pin 0 for the
+     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA,ENABLE); // Enable clock for GPIO Port A
+     GPIO_InitTypeDef GPIO_InitStructAll; // Define typedef struct for setting pins
+
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_AF; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_0; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOA, &GPIO_InitStructAll);
+}
+
+void setup(void){
+    init_usb_uart( 9600 ); // Initialize USB serial emulation at 9600 baud
+    printf("Initialising all hardware components\n");
+
+    // Initialise the Joystick
+    initJoystick();
+
+    // Init LED GPIO
+    initLED();
+
+    // init interrupts
+    init_interrupt();
+
+    //init timer
     initTimer();
     initstopwatch();
 
-    // Setup exericee 1-6
+    // Setup exericee 1-6 - This exercise wwas not completed
+    // init_PulseWidthMeas();
 }
 int main(void)
 {
@@ -110,7 +148,7 @@ int main(void)
     if ( (joyStickState >> 4) == 1) {
         // Check if the buttom is still pressed after a short loop
         for (int i=0; i<10000; i++) {
-            // Do nothing
+            // Do nothing - This part is used as an delay function
         }
         temp = readJoystick();
         if ( (temp >> 4) == 1) {
@@ -123,7 +161,7 @@ int main(void)
     if(joyStickState != lastJoystickstate){
         PrintStopwatch(joyStickState);
     }
-    // Logic for changing color depending on how the
+    // Logic for changing color depending on how the joystick
     if((joyStickState != lastJoystickstate) && joyStickState){
         //Print the state of the Joystick to the console
         updateLEDValues( joyStickState, GreenColor, BlueColor, RedColor );

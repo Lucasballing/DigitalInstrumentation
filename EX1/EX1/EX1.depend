@@ -453,7 +453,7 @@
 	"stm32f30x_conf.h"
 	"30021_io.h"
 
-1599579363 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex1\ex1\src\timer.c
+1600082737 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex1\ex1\src\timer.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"GPIO.h"

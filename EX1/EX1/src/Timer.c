@@ -32,7 +32,16 @@ void initTimer(){
     TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
     TIM_Cmd(TIM2,ENABLE);
 }
+/*
+void TIM2_IRQHandler(void) {
+ TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
 
+ ICValue1 = TIM_GetCapture1(TIM2); // Period
+ ICValue2 = TIM_GetCapture2(TIM2); // Duty/Width
+ ICValid = 1;
+}
+*/
+// - Uncomment old Timer IRQ for the stop watch.
 void TIM2_IRQHandler(void) {
         if(stopState == 0){
             time1.hs++;
