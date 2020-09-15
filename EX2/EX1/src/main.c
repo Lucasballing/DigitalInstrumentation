@@ -29,8 +29,8 @@ uint8_t number = 100;
 char str[15];
 uint32_t tempfloat;
 uint32_t tempval;
-volatile float channel2ADC = 100.1;
-volatile float channel1ADC = 100.1;
+float channel2ADC = 100.1;
+float channel1ADC = 100.1;
 char str3[20];
 char str2[20];
 ///////////////////////////////////////////////////////////////////////
@@ -40,6 +40,7 @@ char str2[20];
 void TIM2_IRQHandler(void) {
     ADC_measure_PA(1);
     ADC_measure_PA(2);
+    printTextDisplay();
 //Do whatever you want here, but make sure it doesn’t take too much time
  TIM_ClearITPendingBit(TIM2,TIM_IT_Update); // Clear interrupt bit
 }
@@ -136,13 +137,13 @@ void ADC_measure_PA(uint8_t ch){
 }
 
 void printTextDisplay(void){
-    float bias = (float) (3.3 / 4095.0)*10000;
-    double temp =  ((float) channel1ADC )* ((float) bias)/10;
-    channel1ADC = temp/1000;
+    float bias = (float) (3.3 / 4095.0);
+    float temp =(float)  (channel1ADC* bias);
+    channel1ADC = temp;
 
     channel2ADC =  channel2ADC*bias;
-    sprintf(str3,"ADC - Ch 1: %1.6f ",channel1ADC);
-    sprintf(str2,"ADC - Ch 2: %1.6f ",bias);//channel2ADC);
+    sprintf(str3,"ADC - Ch 1: %f ",temp);
+    sprintf(str2,"ADC - Ch 2: %f ",channel2ADC);
     lcd_write_string("Digital Instrumentation", fbuffer, 10, 0);
     lcd_write_string("Group 6", fbuffer, 40, 1);
     lcd_write_string( str3, fbuffer, 15, 2);
@@ -181,7 +182,7 @@ int main(void)
 
 
         // print to display
-        printTextDisplay();
+        //printTextDisplay();
 
         /*
         tempval = 200000;

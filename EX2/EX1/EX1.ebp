@@ -59,7 +59,7 @@
 				</Assembler>
 				<Linker>
 					<Add option="-Wl,--gc-sections" />
-					<Add option="-u printf_float" />
+					<Add option="-u _printf_float" />
 				</Linker>
 			</Target>
 		</Build>
