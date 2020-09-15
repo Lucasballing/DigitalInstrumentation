@@ -29,8 +29,8 @@ uint8_t number = 100;
 char str[15];
 uint32_t tempfloat;
 uint32_t tempval;
-uint16_t channel2ADC = 100;
-uint16_t channel1ADC = 100;
+volatile float channel2ADC = 100.1;
+volatile float channel1ADC = 100.1;
 char str3[20];
 char str2[20];
 ///////////////////////////////////////////////////////////////////////
@@ -130,18 +130,19 @@ void ADC_measure_PA(uint8_t ch){
         while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)); // Wait for ADC read
         //for(uint32_t i = 0; i<10000;i++);
         // Read ADC Value
-        channel2ADC =  ADC_GetConversionValue(ADC1); // Read the ADC value
+        channel2ADC =   ADC_GetConversionValue(ADC1); // Read the ADC value
     }
 
 }
 
 void printTextDisplay(void){
-    //channel1ADC = (float) (channel1ADC*( (double) 3.3 / (double) ( ( 1 << 12) - 1) ) );
-    //channel2ADC = (float) (channel2ADC*( (double) 3.3 / (double) ( ( 1 << 12) - 1) ) );
-    sprintf(str3,"ADC - Ch 1: %d ",channel1ADC);
-    sprintf(str2,"ADC - Ch 2: %d ",channel2ADC);
-    //float float1 = 3.3;
-    //printf("%1.2f",3.3);
+    float bias = (float) (3.3 / 4095.0)*10000;
+    double temp =  ((float) channel1ADC )* ((float) bias)/10;
+    channel1ADC = temp/1000;
+
+    channel2ADC =  channel2ADC*bias;
+    sprintf(str3,"ADC - Ch 1: %1.6f ",channel1ADC);
+    sprintf(str2,"ADC - Ch 2: %1.6f ",bias);//channel2ADC);
     lcd_write_string("Digital Instrumentation", fbuffer, 10, 0);
     lcd_write_string("Group 6", fbuffer, 40, 1);
     lcd_write_string( str3, fbuffer, 15, 2);
@@ -173,7 +174,7 @@ int main(void)
  setup();
 
  // Read ADC from channel 1 // or 2
-  //ADC_measure_PA(1);
+  ADC_measure_PA(1);
 
  // Now we are ready to enter the While loop.
      while(1){
@@ -181,11 +182,7 @@ int main(void)
 
         // print to display
         printTextDisplay();
-        //printf("%1.2f",3.3);
-        //printf("%f",3.3);
-        //printf("%g",3.3);
-        //printf("%e",3.3);
-        //printf("Made it here - 3");
+
         /*
         tempval = 200000;
         //tempfloat = read_float_flash(PG31_BASE,0);
