@@ -27,6 +27,8 @@
 uint8_t fbuffer[512];
 uint8_t number = 100;
 char str[15];
+uint32_t tempfloat;
+uint32_t tempval;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
@@ -59,6 +61,25 @@ int main(void)
      while(1){
         // print to display
         printTextDisplay();
+        tempval = 200000;
+        //tempfloat = read_float_flash(PG31_BASE,0);
+        init_page_flash(PG31_BASE);
+        FLASH_Unlock();
+        for ( int i = 0; i < 10; i++ ){
+        write_word_flash(PG31_BASE,i,tempval);
+        }
+        FLASH_Lock();
+        //tempfloat = read_float_flash(PG31_BASE,0);
+
+
+        //tempval = read_word_flash(PG31_BASE,0);
+        //if(tempval!=(uint32_t)0xDEADBEEF){
+            //init_page_flash(PG31_BASE);
+            //FLASH_Unlock();
+            //write_word_flash(PG31_BASE,0,0xDEADBEEF);
+            //FLASH_Lock();
+        //}
+        //tempval = read_hword_flash(PG31_BASE,0);
 
 
     }
