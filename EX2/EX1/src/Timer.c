@@ -19,7 +19,7 @@ void initTimer(){
     TIM_TimeBaseStructInit(&TIM_InitStructure);
     TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_InitStructure.TIM_Period = 630000; // Double check this
+    TIM_InitStructure.TIM_Period = 6300000; // Double check this
     TIM_InitStructure.TIM_Prescaler = 0;
     TIM_TimeBaseInit(TIM2,&TIM_InitStructure);
     // NVIC for timer
@@ -42,29 +42,7 @@ void TIM2_IRQHandler(void) {
 }
 */
 // - Uncomment old Timer IRQ for the stop watch.
-void TIM2_IRQHandler(void) {
-        if(stopState == 0){
-            time1.hs++;
-            if (time1.hs == 100){
-                time1.s++;
-                time1.hs = 0;
 
-            }
-            if (time1.s == 60){
-                time1.m++;
-                time1.s = 0;
-
-            }
-            if (time1.m == 60){
-                time1.h++;
-                time1.m = 0;
-            }
-        }
-
-
-//Do whatever you want here, but make sure it doesn’t take too much time
- TIM_ClearITPendingBit(TIM2,TIM_IT_Update); // Clear interrupt bit
-}
 
  void initstopwatch(){
     time1.hs = 0;
