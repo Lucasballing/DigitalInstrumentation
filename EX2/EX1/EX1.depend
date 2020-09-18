@@ -674,7 +674,7 @@
 1599567500 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\led_driver.c
 	"30021_io.h"
 
-1600183739 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\main.c
+1600193113 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\main.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"Timer.h"

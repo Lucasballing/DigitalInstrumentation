@@ -11,6 +11,10 @@
    ID:                 $Id:  $
 
 **********************************************************************/
+#define VREFINT_CAL *((uint16_t*) ((uint32_t) 0x1FFFF7BA)) //calibrated at 3.3V@ 30C
+
+
+
 #include "stm32f30x_conf.h" // STM32 config
 #include "30021_io.h" // Input/output library for this course
 // Includes need for the GPIOs
@@ -25,14 +29,11 @@
 // ------------------------Global Variables--------------------------//
 ///////////////////////////////////////////////////////////////////////
 uint8_t fbuffer[512];
-uint8_t number = 100;
-char str[15];
 uint32_t tempfloat;
 uint32_t tempval;
 float channel2ADC = 100.1;
 float channel1ADC = 100.1;
-char str3[20];
-char str2[20];
+float VREFINT_DATA = 3.30;
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
@@ -111,6 +112,19 @@ void ADC_setup_PA(void){
 
 
 }
+void ADC_Cal(void){
+    ADC_VrefintCmd(ADC1,ENABLE); // setup ref voltage to channel 18
+    for(uint32_t i = 0; i<10000;i++); // I think this is needed...
+    // turn on ADC - 8Mhz  - 2,2us
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_18, 1, ADC_SampleTime_4Cycles5); // need to be 2,2us
+    // Measure the internal Voltage
+    ADC_StartConversion(ADC1); // Start ADC read
+    while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)); // Wait for ADC read
+    //for(uint32_t i = 0; i<10000;i++);
+    // Read ADC Value
+    VREFINT_DATA = ADC_GetConversionValue(ADC1); // Read the ADC value
+
+}
 
 void ADC_measure_PA(uint8_t ch){
 
@@ -137,15 +151,29 @@ void ADC_measure_PA(uint8_t ch){
 }
 
 void printTextDisplay(void){
+    // Initialise and declare Char array for string storage
+    char str5[20];
+    char str4[20];
+    char str3[20];
+    char str2[20];
+    // Run function for measuring internal voltage.
+    ADC_Cal();
+    // Print ADC stp size
+    float VDDA = (float) (3.3 *((float) (VREFINT_CAL) /VREFINT_DATA));
+    float VCH1 = (float) ((VDDA/4095.0)*channel1ADC); // Print the step size and do it for the other channel too
+    float VCH2 = (float) ((VDDA/4095.0)*channel2ADC);
+   // Do normal
     float bias = (float) (3.3 / 4095.0);
     float temp =(float)  (channel1ADC* bias);
     channel1ADC = temp;
 
     channel2ADC =  channel2ADC*bias;
-    sprintf(str3,"ADC - Ch 1: %f ",temp);
-    sprintf(str2,"ADC - Ch 2: %f ",channel2ADC);
-    lcd_write_string("Digital Instrumentation", fbuffer, 10, 0);
-    lcd_write_string("Group 6", fbuffer, 40, 1);
+    sprintf(str5,"ADC STEP 1: %1.3f ",VCH1);
+    sprintf(str4,"ADC STEP 2: %1.3f ",VCH2);
+    sprintf(str3,"ADC - Ch 1: %1.3f ",temp);
+    sprintf(str2,"ADC - Ch 2: %1.3f ",channel2ADC);
+    lcd_write_string( str5, fbuffer, 15, 0);
+    lcd_write_string( str4, fbuffer, 15, 1);
     lcd_write_string( str3, fbuffer, 15, 2);
     lcd_write_string( str2, fbuffer, 15, 3);
     lcd_push_buffer(fbuffer);
@@ -184,7 +212,7 @@ int main(void)
         // print to display
         //printTextDisplay();
 
-        /*
+        //  Read and Write from flash
         tempval = 200000;
         //tempfloat = read_float_flash(PG31_BASE,0);
         init_page_flash(PG31_BASE);
@@ -193,7 +221,7 @@ int main(void)
         write_word_flash(PG31_BASE,i,tempval);
         }
         FLASH_Lock();
-        */
+
         //tempfloat = read_float_flash(PG31_BASE,0);
 
 

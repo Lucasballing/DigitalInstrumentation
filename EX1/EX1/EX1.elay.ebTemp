@@ -11,12 +11,12 @@
 			<Cursor1 position="919" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\GPIO.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\GPIO.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="826" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\main.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\main.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4618" topLine="0" />
 		</Cursor>
