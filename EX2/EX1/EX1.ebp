@@ -92,6 +92,7 @@
 		<Unit filename="cmsis\core_cmFunc.h" />
 		<Unit filename="cmsis\core_cmInstr.h" />
 		<Unit filename="inc\30021_io.h" />
+		<Unit filename="inc\ADC.h" />
 		<Unit filename="inc\flash.h" />
 		<Unit filename="inc\lcd.h" />
 		<Unit filename="inc\stm32f30x.h" />
@@ -188,6 +189,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\30021_io.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\ADC.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\flash.c">

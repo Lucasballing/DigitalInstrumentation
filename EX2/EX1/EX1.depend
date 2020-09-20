@@ -674,13 +674,14 @@
 1599567500 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\led_driver.c
 	"30021_io.h"
 
-1600193113 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\main.c
+1600610441 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\main.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"Timer.h"
 	"lcd.h"
 	"flash.h"
 	"string.h"
+	"ADC.h"
 
 1599574347 c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\inc\gpio.h
 
@@ -928,4 +929,13 @@
 
 1600172734 source:c:\users\chris\onedrive - danmarks tekniske universitet\digital_instro\digital_instrumentation\ex2\ex1\src\system_stm32f30x.c
 	"stm32f30x.h"
+
+1600610441 source:c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\src\adc.c
+	"stm32f30x_conf.h"
+	"30021_io.h"
+	"ADC.h"
+
+1600610097 c:\users\lucas\desktop\dtu\digital_instrumentation\ex2\ex1\inc\adc.h
+	"stm32f30x_conf.h"
+	"30021_io.h"
 
