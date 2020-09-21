@@ -18,6 +18,8 @@
 #include "stm32f30x_conf.h" // STM32 config
 #include "30021_io.h" // Input/output library for this course
 #include "Timer.h"
+// Includes need for the GPIOs
+#include "GPIO.h"
 // includes needed for the LCD control
 #include "lcd.h"
 #include "flash.h"
@@ -32,26 +34,31 @@
 uint8_t fbuffer[512];
 uint32_t tempfloat;
 uint32_t tempval;
-float channel2ADC = 100.1;
-float channel1ADC = 100.1;
+float channel2ADC = 0;
+float channel1ADC = 0;
 float VREFINT_DATA = 3.30;
+volatile uint8_t CalibFlag = 0;
+volatile uint8_t PrintFlag = 0;
+float CALFACT1 = 1.0; //will be loaded from flash, initialized for testing only
+float CALFACT2 = 1.0;
+uint16_t ADC_CH1_RAW = 0;
+uint16_t ADC_CH2_RAW = 0;
 
 ///////////////////////////////////////////////////////////////////////
 // -------------------------- functions ----------------------------//
 ///////////////////////////////////////////////////////////////////////
 // Timer interrupt
 void TIM2_IRQHandler(void) {
-    for(uint32_t i = 0; i < 10000; i++);
 
-    // Measure on the ADCs different channels
-    ADC_measure_PA(1);
-    ADC_measure_PA(2);
-
-    // Update Display
-    printTextDisplay();
-
-    //Do whatever you want here, but make sure it doesn’t take too much time
+    PrintFlag = 1;
     TIM_ClearITPendingBit(TIM2,TIM_IT_Update); // Clear interrupt bit
+}
+
+void EXTI0_IRQHandler(void)
+{
+    printf("Joystick down interrupt called! \n");  // SET Calibration Flag - Checked by main
+    CalibFlag = 1;
+    EXTI_ClearITPendingBit(EXTI_Line0);  //Clear the interrupt pending bit
 }
 
 void printTextDisplay(void){
@@ -74,7 +81,10 @@ void printTextDisplay(void){
 
     // Convert the ADC values to voltages
     channel1ADC = channel1ADC * bias;
+    printf("voltage on Ch.1: %fV \n", channel1ADC);
+
     channel2ADC = channel2ADC * bias;
+    printf("voltage on Ch.2: %fV \n", channel2ADC);
 
     // Convert numbers to string Formatting
     sprintf(str5,"ADC STEP 1: %1.3f ",VCH1);
@@ -91,9 +101,85 @@ void printTextDisplay(void){
     lcd_push_buffer(fbuffer);
 }
 
+void initJoystick(void){
+     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC,ENABLE); // Enable clock for GPIO Port C
+     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB,ENABLE); // Enable clock for GPIO Port B
+     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA,ENABLE); // Enable clock for GPIO Port A
+     GPIO_InitTypeDef GPIO_InitStructAll; // Define typedef struct for setting pins
+
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_4; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOA, &GPIO_InitStructAll);
+    // Things to initialise is
+    // PC0 - needed for right movement of the joystick
+    // PA4 - Needed for up movement
+    // PB5 - Needed for center push
+    // PC1 - Needed for left movement
+    // PB0 - Needed for down movement
+
+     // PC0
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_0; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOC, &GPIO_InitStructAll);
+
+     // PB5
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_5; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOB, &GPIO_InitStructAll);
+
+     // PC1
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_1; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOC, &GPIO_InitStructAll);
+
+     // PB0
+     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
+
+     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
+     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
+     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_0; // Set so the configuration is on pin 4
+     GPIO_Init(GPIOB, &GPIO_InitStructAll);
+
+}
+
+void init_interrupt(void){
+    // Setup of interrupt rutines:
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG,ENABLE);
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB,EXTI_PinSource0); // sets port B pin 0 to the interrupts
+
+    // define and set setting for EXTI
+    EXTI_InitTypeDef EXTI_InitStructure;
+    EXTI_InitStructure.EXTI_Line = EXTI_Line0; // line 5 see [RM p. 215]
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    EXTI_Init(&EXTI_InitStructure);
+
+    // setup NVIC
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStructure);
+}
+
 void setup(void){
     init_usb_uart( 9600 ); // Initialize USB serial emulation at 9600 baud
-    printf("Initialising all hardware components\n");
+    printf("\n\n Initialising all hardware components\n");
 
     // setup LCD
     init_spi_lcd();
@@ -110,21 +196,171 @@ void setup(void){
     // Setup timer
     initTimer();
 }
+
+void LoadCorrectionFactor(void)
+{
+
+        //  READ CALFACT1 from FLASH:
+        CALFACT1 = read_float_flash(PG31_BASE, 0);
+
+         //  READ CALFACT2 from FLASH:
+        CALFACT2 = read_float_flash(PG31_BASE, 1); //offset of 4 bytes for a float?
+
+
+/* Checking channel 1 correction factor validity */
+	if( (0.5 < CALFACT1) && (CALFACT1 < 1.5) )
+	{
+		printf("Correction Factor for Ch.1: -> VALID RANGE (%f) \n", CALFACT1);
+	}
+	else
+	{
+		printf("Correction Factor for Ch.1: -> INVALID RANGE (%f), Auto-set to 1.0 \n", CALFACT1);
+        CALFACT1 = 1.0;
+	}
+
+/* Checking channel 2 correction factor validity */
+	if( (0.5 < CALFACT2) && (CALFACT2 < 1.5) )
+	{
+		printf("Correction Factor for Ch.2: -> VALID RANGE (%f) \n", CALFACT2);
+	}
+	else
+	{
+		printf("Correction Factor for Ch.2: -> INVALID RANGE (%f), Auto-set to 1.0 \n", CALFACT2);
+        CALFACT2 = 1.0;
+	}
+
+}
+
+void BurstMeasurement(uint32_t *Accum1, uint32_t *Accum2)
+{
+	uint32_t temp1 = 0;
+	uint32_t temp2 = 0;
+
+/* 16 consecutive ADC measurements for channel 1 */
+//ADC_measure_PA(1); //dummy ADC conversion - first conversion in a 'burst' on CH1 defaults to VDDA (unknown why)
+for(uint8_t i = 0; i <= 15; i++)
+{
+	ADC_measure_PA(1);
+	temp1 = ADC_CH1_RAW + temp1;
+	//printf("Raw Value of ADC_CH1: %u @ iteration i = %u \n", ADC_CH1_RAW, i);
+}
+*Accum1 = temp1;
+
+/* 16 consecutive ADC measurements for channel 2 */
+for(uint8_t i = 0; i <= 15; i++)
+{
+	ADC_measure_PA(2);
+	temp2 = ADC_CH2_RAW + temp2;
+    //printf("Raw Value of ADC_CH2: %u @ iteration i = %u \n", ADC_CH2_RAW, i);
+}
+*Accum2 = temp2;
+
+}
+
+void BenchCalibration(void)
+{
+float TargetVoltage1 = 3.2;
+float TargetVoltage2 = 3.2;
+uint32_t Accum1 = 0;
+uint32_t Accum2 = 0;
+float bias = (3.3 / 4095.0);
+
+printf("Used Target Voltages for Ch.1: %fV and Ch.2: %fV \n", TargetVoltage1, TargetVoltage2);
+
+BurstMeasurement(&Accum1, &Accum2);
+
+/* Converting average average ADC readings to voltage */
+float ave1 = ( ( (float) Accum1 ) / 16.0 ) * bias;
+float ave2 = ( ( (float) Accum2 ) / 16.0 ) * bias;
+
+printf("Average voltages on Ch.1: %fV and Ch.2: %fV \n", ave1, ave2);
+
+/*Computing Correction Factors */
+CALFACT1 = TargetVoltage1 / ave1;
+CALFACT2 = TargetVoltage2 / ave2;
+
+printf("Correction Factors Computed as: %f and %f \n", CALFACT1, CALFACT2);
+
+}
+
+void CalibrationCompare(void)
+{
+    float bias_ideal =      (float) (3.3 / 4095.0);
+    float bias_real =       (float) (3.3172 / 4095.0);
+    float bias_ideal_corr1 = (float) ( (3.3 / 4095.0) *  CALFACT1);
+    float bias_ideal_corr2 = (float) ( (3.3 / 4095.0) *  CALFACT2);
+
+    channel1ADC = ( (float) (ADC_CH1_RAW) ) * bias_ideal;
+    channel2ADC = ( (float) (ADC_CH2_RAW) ) * bias_ideal;
+    printf("ADC voltage using IDEAL VDDA - NO correction: Ch1 = %f, Ch2 = %f \n", channel1ADC, channel2ADC );
+
+    channel1ADC = ( (float) (ADC_CH1_RAW) ) * bias_ideal_corr1;
+    channel2ADC = ( (float) (ADC_CH2_RAW) ) * bias_ideal_corr2;
+    printf("ADC voltage using IDEAL VDDA - WITH correction: Ch1 = %f, Ch2 = %f\n", channel1ADC, channel2ADC );
+
+    channel1ADC = ( (float) (ADC_CH1_RAW) ) * bias_real;
+    channel2ADC = ( (float) (ADC_CH2_RAW) ) * bias_real;
+    printf("ADC voltage using MEASURED VDDA - NO correction: Ch1 = %f, Ch2 = %f\n", channel1ADC, channel2ADC );
+
+}
+
+
 int main(void)
 {
-  // Run all setup task before going into the while loop.
-  setup();
+//Run all setup task before going into the while loop.
+setup();
 
-  // Read ADC from channel 1 // or 2
-  ADC_measure_PA(1);
+//Run GPIO Setup
+initJoystick();
+init_interrupt();
+
+//LOAD CALFACT1 and CALFACT2 from FLASH <--- help chrissssssss
+
+// Check correction factors - valid range or not
+LoadCorrectionFactor();
+
+//Flag for enabling usage of correction factor
 
  // Now we are ready to enter the While loop.
      while(1){
 
+/* Exercise 2.4 */
+    if(CalibFlag == 1)
+    {
+        BenchCalibration();
+/* STORE Correction Factors in FLASH */
+        init_page_flash(PG31_BASE);
+        FLASH_Unlock();
+        write_float_flash(PG31_BASE, 0, CALFACT1);
+        write_float_flash(PG31_BASE, 1, CALFACT2);
+        FLASH_Lock();
+
+        CalibrationCompare();
+
+        CalibFlag = 0;
+    }
+
+/* Exercise 2.3 */
+/*
+    if(PrintFlag == 1)
+    {
+
+        ADC_measure_PA(1);
+        ADC_measure_PA(2);
+        printTextDisplay();
+        PrintFlag = 0;
+    }
+
+*/
+
+
+
+/*
         //  Read and Write from flash
         tempval = 200000;
         tempfloat = read_float_flash(PG31_BASE,0);
         init_page_flash(PG31_BASE);
+
         FLASH_Unlock();
         for ( int i = 0; i < 10; i++ ){
         write_word_flash(PG31_BASE,i,tempval);
@@ -143,7 +379,7 @@ int main(void)
         //}
         //tempval = read_hword_flash(PG31_BASE,0);
 
-
+*/
 
     }
 }

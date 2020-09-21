@@ -15,6 +15,8 @@
 // Forward declaration of global Variables
 extern float channel2ADC;
 extern float channel1ADC;
+extern uint16_t ADC_CH1_RAW;
+extern uint16_t ADC_CH2_RAW;
 extern float VREFINT_DATA;
 
 
@@ -97,22 +99,25 @@ void ADC_Cal(void){
 void ADC_measure_PA(uint8_t ch){
 
     // Setup Channel
-    // CHannel Config
+    // Channel Config
     if (ch == 1){
-        ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_1Cycles5);
-        // Read Value
-        ADC_StartConversion(ADC1); // Start ADC read
+        ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_1Cycles5); //configure ADC conversion
+        ADC_StartConversion(ADC1); // Start ADC conversion
         while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)); // Wait for ADC read
-        for(uint32_t i = 0; i<10000;i++);
-        // Read ADC Value
+        for(uint32_t i = 0; i<10000;i++); //ABOVE WHILE STATEMENT IS INSUFFICENT WHEN TESTED ON HARDWARE
+
+        ADC_CH1_RAW = ADC_GetConversionValue(ADC1);
+        printf("Raw Value of ADC_CH1: %u \n", ADC_CH1_RAW);
         channel1ADC =  ADC_GetConversionValue(ADC1); // Read the ADC value
+
     }else{
-        ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_1Cycles5);
-        // Read Value
-        ADC_StartConversion(ADC1); // Start ADC read
+        ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_1Cycles5); //configure ADC conversion
+        ADC_StartConversion(ADC1); // Start ADC conversion
         while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)); // Wait for ADC read
-        for(uint32_t i = 0; i<10000;i++);
-        // Read ADC Value
+        for(uint32_t i = 0; i<10000;i++); //ABOVE WHILE STATEMENT IS INSUFFICENT WHEN TESTED ON HARDWARE
+
+        ADC_CH2_RAW = ADC_GetConversionValue(ADC1);
+        printf("Raw Value of ADC_CH2: %u \n", ADC_CH2_RAW);
         channel2ADC =   ADC_GetConversionValue(ADC1); // Read the ADC value
     }
 
