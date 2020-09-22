@@ -94,7 +94,10 @@
 		<Unit filename="inc\30021_io.h" />
 		<Unit filename="inc\ADC.h" />
 		<Unit filename="inc\flash.h" />
+		<Unit filename="inc\GPIO.h" />
 		<Unit filename="inc\lcd.h" />
+		<Unit filename="inc\PWM.h" />
+		<Unit filename="inc\Stepper.h" />
 		<Unit filename="inc\stm32f30x.h" />
 		<Unit filename="inc\stm32f30x_conf.h" />
 		<Unit filename="inc\system_stm32f30x.h" />
@@ -197,13 +200,22 @@
 		<Unit filename="src\flash.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\GPIO.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\lcd.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\PWM.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\startup_stm32f30x.S">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\Stepper.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\system_stm32f30x.c">

@@ -31,6 +31,9 @@ void initTimer(){
     NVIC_Init(&NVIC_InitStructure);
     TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
     TIM_Cmd(TIM2,ENABLE);
+
+
+
 }
 /*
 void TIM2_IRQHandler(void) {
@@ -43,6 +46,42 @@ void TIM2_IRQHandler(void) {
 */
 // - Uncomment old Timer IRQ for the stop watch.
 
+
+
+void timer16_clock_init(){
+
+    RCC_APB1PeriphClockCmd(RCC_APB2Periph_TIM16,ENABLE);
+    TIM_TimeBaseInitTypeDef TIM_InitStructure;
+    TIM_TimeBaseStructInit(&TIM_InitStructure);
+    TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_InitStructure.TIM_Period = 254; // Double check this
+    TIM_InitStructure.TIM_Prescaler = 24;
+    TIM_TimeBaseInit(TIM16,&TIM_InitStructure);
+    // NVIC for timer
+    TIM_OCInitTypeDef TIM_OCInitStruct;
+    TIM_OCStructInit(&TIM_OCInitStruct);
+    TIM_OCInitStruct.TIM_OCMode=TIM_OCMode_PWM1;
+    TIM_OCInitStruct.TIM_OutputState=TIM_OSSRState_Enable;
+    TIM_OC1Init(TIM16,&TIM_OCInitStruct);
+
+
+    TIM_OC1PreloadConfig(TIM16,TIM_OCPreload_Enable);
+    TIM_CtrlPWMOutputs(TIM16, ENABLE);
+
+    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_Init(&NVIC_InitStructure);
+    TIM_ITConfig(TIM16,TIM_IT_Update,ENABLE);
+    TIM_Cmd(TIM16,ENABLE);
+
+    IM_SetCompare1(TIM16,256);
+    TIM_CtrlPWMOutputs(TIM16, ENABLE);
+
+}
 
  void initstopwatch(){
     time1.hs = 0;

@@ -27,6 +27,9 @@ void initTimer();
 void initstopwatch();
 void PrintWatch();
 void PrintStopwatch(uint8_t joyStickStateLocal);
+void timer16_clock_init();
+
+
 #endif
 
 

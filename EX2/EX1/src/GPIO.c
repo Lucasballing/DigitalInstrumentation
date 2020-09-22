@@ -65,6 +65,25 @@ void initJoystick(void){
 
 }
 
+void GPIO_set_AF1_PA6(){
+
+
+    GPIO_InitTypeDef GPIO_InitStructAll;
+    GPIO_StructInit(&GPIO_InitStructAll);
+     // Then set things that are not default.
+    GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_AF;
+    GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;
+    GPIO_InitStructAll.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructAll);
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource6,GPIO_AF_1);
+
+
+
+}
+
+
+
 uint8_t readJoystick(void){
     uint8_t up, down, center, left, right = 0;
     // Read all the GPIO states

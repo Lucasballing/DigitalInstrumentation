@@ -36,4 +36,10 @@ void initJoystick(void);
 * Output- the state of the GPIO in a special format defined in the exercise.
 */
 uint8_t readJoystick(void);
+
+
+/* GPIO_set_AF1_PA6
+*Used to setup the pin PA6 for altenate mode 1
+*/
+void GPIO_set_AF1_PA6();
 #endif

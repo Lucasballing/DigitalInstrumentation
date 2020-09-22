@@ -24,6 +24,7 @@
 #include "lcd.h"
 #include "flash.h"
 #include "string.h"
+#include "Stepper.h"
 
 // Include ADC header file
 #include "ADC.h"
@@ -99,59 +100,6 @@ void printTextDisplay(void){
     lcd_write_string( str2, fbuffer, 15, 3);
     // Push buffer to the display
     lcd_push_buffer(fbuffer);
-}
-
-void initJoystick(void){
-     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC,ENABLE); // Enable clock for GPIO Port C
-     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB,ENABLE); // Enable clock for GPIO Port B
-     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA,ENABLE); // Enable clock for GPIO Port A
-     GPIO_InitTypeDef GPIO_InitStructAll; // Define typedef struct for setting pins
-
-     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
-
-     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
-     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
-     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_4; // Set so the configuration is on pin 4
-     GPIO_Init(GPIOA, &GPIO_InitStructAll);
-    // Things to initialise is
-    // PC0 - needed for right movement of the joystick
-    // PA4 - Needed for up movement
-    // PB5 - Needed for center push
-    // PC1 - Needed for left movement
-    // PB0 - Needed for down movement
-
-     // PC0
-     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
-
-     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
-     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
-     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_0; // Set so the configuration is on pin 4
-     GPIO_Init(GPIOC, &GPIO_InitStructAll);
-
-     // PB5
-     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
-
-     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
-     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
-     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_5; // Set so the configuration is on pin 4
-     GPIO_Init(GPIOB, &GPIO_InitStructAll);
-
-     // PC1
-     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
-
-     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
-     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
-     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_1; // Set so the configuration is on pin 4
-     GPIO_Init(GPIOC, &GPIO_InitStructAll);
-
-     // PB0
-     GPIO_StructInit(&GPIO_InitStructAll); // Initialize GPIO struct
-
-     GPIO_InitStructAll.GPIO_Mode = GPIO_Mode_IN; // Set as input
-     GPIO_InitStructAll.GPIO_PuPd = GPIO_PuPd_DOWN;// Set as pull down
-     GPIO_InitStructAll.GPIO_Pin = GPIO_Pin_0; // Set so the configuration is on pin 4
-     GPIO_Init(GPIOB, &GPIO_InitStructAll);
-
 }
 
 void init_interrupt(void){
@@ -314,6 +262,11 @@ setup();
 initJoystick();
 init_interrupt();
 
+//Stops the code ontil the something is pressed
+serialcom();
+
+
+printf("hej");
 //LOAD CALFACT1 and CALFACT2 from FLASH <--- help chrissssssss
 
 // Check correction factors - valid range or not
@@ -325,10 +278,10 @@ LoadCorrectionFactor();
      while(1){
 
 /* Exercise 2.4 */
-    if(CalibFlag == 1)
+    /*if(CalibFlag == 1)
     {
         BenchCalibration();
-/* STORE Correction Factors in FLASH */
+/* STORE Correction Factors in FLASH
         init_page_flash(PG31_BASE);
         FLASH_Unlock();
         write_float_flash(PG31_BASE, 0, CALFACT1);
@@ -338,7 +291,7 @@ LoadCorrectionFactor();
         CalibrationCompare();
 
         CalibFlag = 0;
-    }
+    }*/
 
 /* Exercise 2.3 */
 /*
