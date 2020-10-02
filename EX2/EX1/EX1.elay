@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBitz_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="inc\flash.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cmsis\core_cm4.h" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="34342" topLine="558" />
+		</Cursor>
+	</File>
+	<File name="inc\flash.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="401" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="inc\stm32f30x.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="322691" topLine="3994" />
-		</Cursor>
-	</File>
-	<File name="inc\Timer.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="inc\PWM.h" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="inc\stm32f30x.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="47879" topLine="734" />
+		</Cursor>
+	</File>
+	<File name="inc\stm32f30x_conf.h" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3182" topLine="38" />
+		</Cursor>
+	</File>
+	<File name="inc\Timer.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="405" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="SPL\inc\stm32f30x_adc.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="9" zoom_2="0">
@@ -21,9 +36,19 @@
 			<Cursor1 position="44823" topLine="694" />
 		</Cursor>
 	</File>
-	<File name="SPL\inc\stm32f30x_rcc.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="SPL\inc\stm32f30x_gpio.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="26275" topLine="504" />
+			<Cursor1 position="2398" topLine="46" />
+		</Cursor>
+	</File>
+	<File name="SPL\inc\stm32f30x_rcc.h" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="20050" topLine="448" />
+		</Cursor>
+	</File>
+	<File name="SPL\inc\stm32f30x_tim.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2200" topLine="42" />
 		</Cursor>
 	</File>
 	<File name="SPL\src\stm32f30x_adc.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="11" zoom_2="0">
@@ -31,22 +56,42 @@
 			<Cursor1 position="83222" topLine="2167" />
 		</Cursor>
 	</File>
-	<File name="SPL\src\stm32f30x_flash.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="SPL\src\stm32f30x_flash.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="8973" topLine="231" />
 		</Cursor>
 	</File>
-	<File name="SPL\src\stm32f30x_usart.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="SPL\src\stm32f30x_gpio.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="18279" topLine="477" />
+		</Cursor>
+	</File>
+	<File name="SPL\src\stm32f30x_misc.c" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6176" topLine="118" />
+		</Cursor>
+	</File>
+	<File name="SPL\src\stm32f30x_rcc.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="56492" topLine="1368" />
+		</Cursor>
+	</File>
+	<File name="SPL\src\stm32f30x_tim.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10987" topLine="246" />
+		</Cursor>
+	</File>
+	<File name="SPL\src\stm32f30x_usart.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="79447" topLine="1895" />
 		</Cursor>
 	</File>
-	<File name="src\30021_io.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\30021_io.c" open="1" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="191" topLine="7" />
+			<Cursor1 position="191" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\ADC.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\ADC.c" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3958" topLine="0" />
 		</Cursor>
@@ -56,28 +101,34 @@
 			<Collapse line="98" />
 		</Folding>
 	</File>
-	<File name="src\flash.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\flash.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1024" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\main.c" open="1" top="1" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\GPIO.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9556" topLine="117" />
+			<Cursor1 position="529" topLine="0" />
 		</Cursor>
-		<Folding>
-			<Collapse line="50" />
-			<Collapse line="57" />
-			<Collapse line="103" />
-			<Collapse line="156" />
-			<Collapse line="200" />
-			<Collapse line="234" />
-			<Collapse line="260" />
-		</Folding>
 	</File>
-	<File name="src\startup_stm32f30x.S" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\main.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3041" topLine="16" />
+			<Cursor1 position="1372" topLine="28" />
+		</Cursor>
+	</File>
+	<File name="src\PWM.c" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="103" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\startup_stm32f30x.S" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2904" topLine="117" />
+		</Cursor>
+	</File>
+	<File name="src\Stepper.c" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="792" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\system_stm32f30x.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -85,9 +136,9 @@
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Timer.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Timer.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="576" topLine="0" />
+			<Cursor1 position="1406" topLine="0" />
 		</Cursor>
 	</File>
 </EmBitz_layout_file>

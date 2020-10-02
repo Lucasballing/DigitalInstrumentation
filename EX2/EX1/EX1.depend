@@ -1160,27 +1160,24 @@
 1600616972 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\system_stm32f30x.c
 	"stm32f30x.h"
 
-1600616972 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\timer.c
+1601325035 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\timer.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"GPIO.h"
 	"Timer.h"
 
-1600616972 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\gpio.h
+1600876908 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\gpio.h
 
-1600616972 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\timer.h
+1601323247 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\timer.h
 	"stm32f30x_conf.h"
 	"30021_io.h"
 
-1600623800 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\main.c
+1601323184 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\main.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"Timer.h"
 	"GPIO.h"
-	"lcd.h"
-	"flash.h"
-	"string.h"
-	"ADC.h"
+	"Stepper.h"
 
 1600616972 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\adc.h
 	"stm32f30x_conf.h"
@@ -1412,28 +1409,25 @@
 
 1600616972 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\charset.h
 
-1600686201 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\main.c
+1601323184 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\main.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"Timer.h"
 	"GPIO.h"
-	"lcd.h"
-	"flash.h"
-	"string.h"
-	"ADC.h"
+	"Stepper.h"
 
-1600616972 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\timer.h
+1601323247 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\timer.h
 	"stm32f30x_conf.h"
 	"30021_io.h"
 
-1600616972 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\gpio.h
+1600876908 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\gpio.h
 
 1600616972 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\startup_stm32f30x.s
 
 1600616972 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\system_stm32f30x.c
 	"stm32f30x.h"
 
-1600616972 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\timer.c
+1601630990 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\timer.c
 	"stm32f30x_conf.h"
 	"30021_io.h"
 	"GPIO.h"
@@ -1474,4 +1468,34 @@
 
 1600785335 source:c:\users\chris\onedrive - danmarks tekniske universitet\digital_instro\digital_instrumentation\ex2\ex1\src\gpio.c
 	"30021_io.h"
+
+1601322707 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\gpio.c
+	"30021_io.h"
+
+1600876908 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\stepper.h
+	"stm32f30x_conf.h"
+
+1600876908 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\pwm.c
+	"PWM.h"
+
+1600876908 c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\pwm.h
+	"stm32f30x_conf.h"
+
+1600876908 source:c:\users\edgar\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\stepper.c
+	"Stepper.h"
+
+1601322707 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\gpio.c
+	"30021_io.h"
+
+1600876908 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\stepper.h
+	"stm32f30x_conf.h"
+
+1600876908 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\pwm.c
+	"PWM.h"
+
+1600876908 d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\inc\pwm.h
+	"stm32f30x_conf.h"
+
+1600876908 source:d:\onedrive directory\onedrive\digital instrumentering e20\projects\git desktop\digital_instrumentation\ex2\ex1\src\stepper.c
+	"Stepper.h"
 
